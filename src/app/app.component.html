@@ -1,0 +1,9 @@
+<p>{{ pet | json}}</p>
+
+<p>{{ counter | json}}</p>
+
+<button type="button" [disabled]="actionToggle.feedDisabled" (click)="action('hunger', 'feedCount')">Feed</button>
+<button type="button" [disabled]="actionToggle.playDisabled" (click)="action('entertainment', 'playCount')">Play</button>
+<button type="button" [disabled]="actionToggle.hugDisabled" (click)="action('entertainment', 'hugCount')">Hug</button>
+<button type="button" [disabled]="actionToggle.teachDisabled" (click)="action('education', 'teachCount')">Teach</button>
+<button type="button" [disabled]="actionToggle.bathDisabled" (click)="action('hygiene', 'bathCount')">Bath</button>
