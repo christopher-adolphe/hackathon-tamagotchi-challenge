@@ -1,9 +1,38 @@
-<p>{{ pet | json}}</p>
+<section id="gameMenu" *ngIf="!isGameStarted">
+  <form [formGroup]="petForm" (ngSubmit)="onStartGame()">
+    <legend>Pet type</legend>
+    <div>
+      <input type="radio" id="petType1" name="petType" value="Cat" formControlName="petType">
+      <label for="petType1">Cat</label>
+    </div>
+    <div>
+      <input type="radio" id="petType2" name="petType" value="Dog" formControlName="petType">
+      <label for="petType2">Dog</label>
+    </div>
+    <div>
+      <input type="radio" id="petType3" name="petType" value="Bird" formControlName="petType">
+      <label for="petType3">Bird</label>
+    </div>
+  
+    <div>
+      <label for="petName">Pet Name</label>
+      <input type="text" id="petName" name="petName" formControlName="petName">
+    </div>
+  
+    <div>
+      <button type="submit">Start game</button>
+    </div>
+  </form>
+</section>
 
-<p>{{ counter | json}}</p>
+<section id="gamePlay" *ngIf="isGameStarted">
+  <p>{{ pet | json}}</p>
 
-<button type="button" [disabled]="actionToggle.feedDisabled" (click)="action('hunger', 'feedCount')">Feed</button>
-<button type="button" [disabled]="actionToggle.playDisabled" (click)="action('entertainment', 'playCount')">Play</button>
-<button type="button" [disabled]="actionToggle.hugDisabled" (click)="action('entertainment', 'hugCount')">Hug</button>
-<button type="button" [disabled]="actionToggle.teachDisabled" (click)="action('education', 'teachCount')">Teach</button>
-<button type="button" [disabled]="actionToggle.bathDisabled" (click)="action('hygiene', 'bathCount')">Bath</button>
+  <p>{{ counter | json}}</p>
+
+  <button type="button" [disabled]="actionToggle.feedDisabled" (click)="action('hunger', 'feedCount')">Feed</button>
+  <button type="button" [disabled]="actionToggle.playDisabled" (click)="action('entertainment', 'playCount')">Play</button>
+  <button type="button" [disabled]="actionToggle.hugDisabled" (click)="action('entertainment', 'hugCount')">Hug</button>
+  <button type="button" [disabled]="actionToggle.teachDisabled" (click)="action('education', 'teachCount')">Teach</button>
+  <button type="button" [disabled]="actionToggle.bathDisabled" (click)="action('hygiene', 'bathCount')">Bath</button>
+</section>

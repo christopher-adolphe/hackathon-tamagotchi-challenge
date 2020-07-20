@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import { Pet } from './shared/models/pet.interface';
 
@@ -8,18 +9,17 @@ import { Pet } from './shared/models/pet.interface';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
+  petForm: FormGroup;
+  petType: FormControl;
+  petName: FormControl;
+  isGameStarted: boolean;
   pet: Pet;
   counter: {[key: string]: number};
   actionToggle: {[key: string]: boolean};
 
   ngOnInit() {
-    this.pet = {
-      name: 'Wally',
-      hunger: 5,
-      hygiene: 1,
-      education: 1,
-      entertainment: 1
-    };
+    this.onInitPetForm();
+    this.isGameStarted = false;
 
     this.counter = {
       feedCount: 0,
@@ -36,6 +36,29 @@ export class AppComponent implements OnInit {
       teachDisabled: false,
       bathDisabled: false
     };
+  }
+
+  onInitPetForm() {
+    this.petType = new FormControl(null, [Validators.required]);
+    this.petName = new FormControl(null, [Validators.required]);
+    this.petForm = new FormGroup({
+      petType: this.petType,
+      petName: this.petName
+    });
+  }
+
+  onStartGame() {
+    console.log(this.petForm);
+    this.pet = {
+      type: this.petType.value,
+      name: this.petName.value,
+      hunger: 5,
+      hygiene: 1,
+      education: 1,
+      entertainment: 1
+    };
+
+    this.isGameStarted = this.petForm.valid;
   }
 
   action(characteristic: string, counterName: string) {
