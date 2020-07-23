@@ -39,11 +39,11 @@ export class AppComponent implements OnInit {
     };
 
     this.actionToggle = {
-      feedDisabled: false,
-      playDisabled: false,
-      hugDisabled: false,
-      teachDisabled: false,
-      bathDisabled: false
+      feed: false,
+      play: false,
+      hug: false,
+      teach: false,
+      bath: false
     };
   }
 
@@ -67,19 +67,25 @@ export class AppComponent implements OnInit {
     };
 
     this.isGameStarted = this.petForm.valid;
-    this.onStartTimer();
+    this.onStartTimer('feed', 3000);
   }
 
-  onStartTimer() {
-    this.feedTimer$ = timer(3000, 3000).pipe(
+  onStartTimer(type: string, delay: number) {
+    this.feedTimer$ = timer(delay, delay).pipe(
       switchMap(() => {
-        return of('Feeding timer started');
+        return of(`${type}`);
       }),
       takeUntil(this._stopFeedTimer),
       repeatWhen(() => this._startFeedTimer)
     );
 
-    this.feedTimer$.subscribe(val => console.log(val));
+    this.feedTimer$.subscribe(
+      (type: string) => {
+        Object.keys(this.actionToggle)
+          .filter(key => key !== type)
+          .forEach(filteredKey => this.actionToggle[filteredKey] = true);
+      }
+    );
   }
 
   startFeedTimer(): void {
