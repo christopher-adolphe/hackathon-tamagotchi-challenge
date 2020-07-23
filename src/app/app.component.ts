@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Observable, Subject, timer, of } from 'rxjs';
+import { repeatWhen, switchMap, takeUntil } from 'rxjs/operators';
 
 import { Pet } from './shared/models/pet.interface';
 
@@ -16,6 +18,13 @@ export class AppComponent implements OnInit {
   pet: Pet;
   counter: {[key: string]: number};
   actionToggle: {[key: string]: boolean};
+
+  feedTimer$: Observable<any>;
+  private readonly _startFeedTimer = new Subject<void>();
+  private readonly _stopFeedTimer = new Subject<void>();
+
+  playTimer: Observable<number>;
+  restTimer: Observable<number>;
 
   ngOnInit() {
     this.onInitPetForm();
@@ -48,7 +57,6 @@ export class AppComponent implements OnInit {
   }
 
   onStartGame() {
-    console.log(this.petForm);
     this.pet = {
       type: this.petType.value,
       name: this.petName.value,
@@ -59,6 +67,27 @@ export class AppComponent implements OnInit {
     };
 
     this.isGameStarted = this.petForm.valid;
+    this.onStartTimer();
+  }
+
+  onStartTimer() {
+    this.feedTimer$ = timer(3000, 3000).pipe(
+      switchMap(() => {
+        return of('Feeding timer started');
+      }),
+      takeUntil(this._stopFeedTimer),
+      repeatWhen(() => this._startFeedTimer)
+    );
+
+    this.feedTimer$.subscribe(val => console.log(val));
+  }
+
+  startFeedTimer(): void {
+    this._startFeedTimer.next();
+  }
+
+  stopFeedTimer(): void {
+    this._stopFeedTimer.next();
   }
 
   action(characteristic: string, counterName: string) {
@@ -73,6 +102,8 @@ export class AppComponent implements OnInit {
 
       this.resetCounter(counterName);
     }
+
+    this.startFeedTimer();
   }
 
   checkCounter(counterName: string) {
